@@ -33,7 +33,7 @@ public class Empleado {
     private String nombre; // No es primitivo, es una clase como tal. Hace referencia en el Heap.
 
     // metodo constructor
-    public Empleado(byte nivelAcceso, short codigoDepartamento, int idEmpleo, long numeroDocumento, float porcentajeDescuento, double salarioBase, char genero, boolean esActivo, String nombre){
+    public Empleado(byte nivelAcceso, short codigoDepartamento, int idEmpleo, long numeroDocumento, float porcentajeDescuento, double salarioBase, char genero, boolean esActivo, String nombre) {
 
         this.nivelAcceso = nivelAcceso;
         this.codigoDepartamento = codigoDepartamento;
@@ -123,14 +123,12 @@ public class Empleado {
 
     // toString - información legible
     @Override // anotación que le dice a Java que esta sobrescribiendo un método de la clase padre
-    public String toString(){
+    public String toString() {
         return "Empleado{" +
                 "id=" + idEmpleo +
-                ", nombre='" + nombre +'\'' +
+                ", nombre='" + nombre + '\'' +
                 ", salario=" + salarioBase +
                 ", activo=" + esActivo +
                 '}';
     }
-
-
 }
