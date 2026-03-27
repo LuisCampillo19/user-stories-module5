@@ -61,5 +61,14 @@ public class NotasArquitectura {
         En Java 8 el GC por defecto era Parallel GC. En Java 17/21 el predeterminado es
         G1GC (Garbage First), más eficiente para aplicaciones de baja latencia.
         """;
+    // mostrar los comentarios
+    public void mostrar() {
+        System.out.println("NOTAS DE ARQUITECTURA");
+        System.out.println(legacyJava);
+        System.out.println(significadoLTS);
+        System.out.println(featuresNuevas);
+        System.out.println(migrarJava);
+        System.out.println(gestionMemoria);
+    }
 }
 
