@@ -16,7 +16,7 @@ import java.util.Scanner;
  *   - Esto es util para reportes simplificados donde no se necesitan decimales,
  *     pero debe documentarse para evitar confusiones en los datos.
  */
-public class MatrizDesempenio {
+public class Matrizdesempenio {
 
     private static final int TRIMESTRES = 3;
     private static final double NOTA_MINIMA = 0.0;
