@@ -1,0 +1,37 @@
+*   [33md88708a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mfeature/week2-control-flujo[m[33m)[m Merge pull request #6 from LuisCampillo19/feature/week2-control-flujo
+[31m|[m[32m\[m  
+[31m|[m * [33m4f3b61f[m[33m ([m[1;31morigin/feature/week2-control-flujo[m[33m)[m feat: add gitignore preffer
+[31m|[m * [33m4ae209c[m feat: add exception handling and ternary operator (task4)
+[31m|[m * [33m9b8557e[m feat: add performace matrix and casting (task3)
+[31m|[m * [33mdeafbd8[m feat: add scanner with var and validation (task2)
+[31m|[m * [33m21a70f2[m feat: implement legacy and modern switch menu (task1)
+[31m|[m[31m/[m  
+* [33mad5e731[m refactor: restore src to root, remove weekly structure per feedback
+* [33mced28b1[m chore: remove compiled files from tracking
+* [33m1a5329f[m refactor: organize project into weekly structure
+*   [33mc501af3[m Merge pull request #5 from LuisCampillo19/feature/task4-ejecucion
+[33m|[m[34m\[m  
+[33m|[m * [33m6076b78[m[33m ([m[1;31morigin/feature/task4-ejecucion[m[33m, [m[1;32mfeature/task4-ejecucion[m[33m)[m feat: complete Main with NPE lab and reference comparison
+[33m|[m[33m/[m  
+*   [33m17f9759[m Merge pull request #4 from LuisCampillo19/feature/task3-logica-negocio
+[35m|[m[36m\[m  
+[35m|[m * [33mc2c8198[m[33m ([m[1;31morigin/feature/task3-logica-negocio[m[33m, [m[1;32mfeature/task3-logica-negocio[m[33m)[m feat: add ReglasNegocio with operator precedence and business rules
+[35m|[m * [33me696235[m feat: add function service business rules
+[35m|[m[35m/[m  
+*   [33me6d855d[m Merge pull request #3 from LuisCampillo19/feature/task2-modelado
+[1;31m|[m[1;32m\[m  
+[1;31m|[m * [33m5f3e37f[m[33m ([m[1;31morigin/feature/task2-modelado[m[33m, [m[1;32mfeature/task2-modelado[m[33m)[m feat: add print Main and instance objects
+[1;31m|[m * [33m1bdf029[m feat: add new model record enterprise with docs
+[1;31m|[m * [33m69314ff[m feat: add model employee with docs
+[1;31m|[m[1;31m/[m  
+*   [33m91022f9[m Merge pull request #2 from LuisCampillo19/feature/task1-arquitectura
+[1;33m|[m[1;34m\[m  
+[1;33m|[m [1;34m|[m * [33m2b6415d[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #1 from LuisCampillo19/feature/task1-arquitectura
+[1;33m|[m [1;34m|[m[1;33m/[m[1;34m|[m 
+[1;33m|[m[1;33m/[m[1;34m|[m[1;34m/[m  
+[1;33m|[m * [33m895135b[m[33m ([m[1;31morigin/feature/task1-arquitectura[m[33m, [m[1;32mfeature/task1-arquitectura[m[33m)[m feat: feature to display class comments
+[1;33m|[m * [33m7bbdeaa[m docs: add Java version documentation
+[1;33m|[m[1;33m/[m  
+* [33mb6ef601[m[33m ([m[1;32mmain[m[33m)[m chore: remove ignored files and fix project structure v2
+* [33mc0d699c[m chore: add gitignore and refactor
+* [33me21d11b[m srt: initial project structure

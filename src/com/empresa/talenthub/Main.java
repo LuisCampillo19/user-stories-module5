@@ -1,163 +1,133 @@
 package com.empresa.talenthub;
 
-import com.empresa.talenthub.arquitectura.NotasArquitectura;
-import com.empresa.talenthub.logica.ReglasNegocio;
-import com.empresa.talenthub.modelo.Empleado;
-import com.empresa.talenthub.modelo.EmpresaRecord;
+import com.empresa.talenthub.menu.MenuPrincipal;
+import com.empresa.talenthub.scanner.CapturaEmpleado;
+import com.empresa.talenthub.matriz.Matrizdesempenio;
+import com.empresa.talenthub.excepciones.ManejoExcepciones;
 
+import java.util.Scanner;
+
+/**
+ * CORPORATE TALENT HUB v2.0 - Semana 2
+ * Control de flujo y evolucion de versiones
+ *
+ * Este programa integra las 4 tasks de la historia de usuario:
+ *   TASK 1: Switch Legacy (Java 8) vs Switch Expression (Java 17/21)
+ *   TASK 2: Scanner con var (Java 11+), do-while y validaciones con if/else
+ *   TASK 3: Matriz de desempenio (double[][]), for anidados y casting double->int
+ *   TASK 4: Manejo de excepciones (try-catch), diagnostico Java 17/21, operador ternario
+ *
+ * @author Luis Campillo
+ * @version 2.0
+ */
 public class Main {
+
     public static void main(String[] args) {
-        // Text Block de Java 17
-        // Estos eliminan los \n y las concatenaciones de los Strings
-        String encabezado = """
-                __________________________________
-                    CORPORATE TALENT HUB v1.0
-                    Sistema de Gestión de Talento
-                __________________________________               
-                """;
-        System.out.println(encabezado);
+        // Scanner compartido para toda la aplicacion
+        var scanner = new Scanner(System.in);
 
-        // Task 1: imprimir notas de arquitectura
-        new NotasArquitectura().mostrar();
+        // Variable para almacenar calificaciones (se llena en opcion 3)
+        double[][] calificaciones = null;
 
-        // Task 2: instanciar Empleado (Java 8)
-        Empleado empleado = new Empleado(
-                (byte) 3,           // nivelAcceso
-                (short) 101,        // codigoDepartamento
-                1001,               // idEmpleado
-                1098765432L,        // numeroDocumento
-                0.05f,              // porcentajeDescuento
-                3500000.00,         // salarioBase
-                'M',                // genero
-                true,               // esActivo
-                "Luis Campillo"     // nombre
-        );
-        System.out.println("Empleado creado: " + empleado);
+        // Variable de control para el bucle principal
+        var sistemaActivo = true;
 
-        // Task 2. instanciar con redcord (Java 17)
-        EmpresaRecord empresa = new EmpresaRecord(
-                "Corporate Talent Hub S.A.S",
-                "900.123.456-7",
-                2020
-        );
-        System.out.println("Empresa: " + empresa);
+        System.out.println("========================================");
+        System.out.println("  Bienvenido a Corporate Talent Hub     ");
+        System.out.println("  Version 2.0 - Java 21                 ");
+        System.out.println("========================================");
 
-        // Task 3: motor de reglas y jerarquía de operadores
-        System.out.println("\n=== MOTOR DE REGLAS ===");
+        // Demostrar manejo de excepciones al inicio (Task 4)
+        ManejoExcepciones.demostrarManejoErrores();
 
-        ReglasNegocio reglas = new ReglasNegocio(
-                empleado.getIdEmpleo(),           // idEmpleado (par → tendrá bono extra)
-                empleado.getSalarioBase(),     // salarioBase
-                400000.00,      // bonoMensual
-                90,             // puntajeTest
-                27,             // edad
-                1,              // idSede
-                false           // esActivo
-        );
+        // Bucle principal do-while (Task 2: mantiene el sistema activo)
+        do {
+            // Mostrar menu (Task 1)
+            MenuPrincipal.mostrarMenu();
 
-        // Salario final
-        double salarioFinal = reglas.calcularSalarioFinal();
-        System.out.println("Salario final calculado: $" + salarioFinal);
+            // Leer opcion de forma segura (Task 4: try-catch)
+            var opcion = ManejoExcepciones.leerEnteroSeguro(scanner, "");
 
-        // Bono extra por ID par
-        if (reglas.tieneBonoExtra()) {
-            System.out.println("ID par detectado → aplicando bono extra");
-            reglas.aplicarBonoExtra(500000.00);
-        } else {
-            System.out.println("ID impar → sin bono extra");
-        }
+            if (opcion == -1) {
+                System.out.println("Intente de nuevo con una opcion valida.\n");
+                continue;
+            }
 
-        // Elegibilidad
-        boolean esElegible = reglas.validarElegibilidad();
-        System.out.println("¿Empleado elegible? " + esElegible);
+            // Mostrar que opcion se selecciono usando switch legacy (Task 1)
+            System.out.println(">> " + MenuPrincipal.obtenerOpcionMenuLegacy(opcion) + "\n");
 
-        // Task 4: Laboratorio - Helpful nullPointerExceptions
-        System.out.println("LABORATORIO NPE");
+            // Procesar opcion usando switch expression moderno (Task 1)
+            switch (opcion) {
+                case 1 -> {
+                    // Task 2: Registro de empleado con Scanner, var, do-while, if/else
+                    CapturaEmpleado.registrarEmpleado(scanner);
+                }
+                case 2 -> {
+                    // Task 2: Consulta de empleados registrados
+                    CapturaEmpleado.consultarEmpleados();
 
-        /*
-         * Asignamos null a un atributo String del empleado.
-         * En Java, null significa que la referencia no apunta a ningún objeto en el Heap.
-         * Los tipos primitivos (int, double, boolean...) NUNCA pueden ser null.
-         * Solo los tipos de referencia (String, objetos) pueden serlo.
-         */
-        empleado.setNombre(null);
+                    // Task 1: Mostrar categoria salarial de cada empleado
+                    var total = CapturaEmpleado.getContadorEmpleados();
+                    if (total > 0) {
+                        var salarios = CapturaEmpleado.getSalariosEmpleados();
+                        var nombres = CapturaEmpleado.getNombresEmpleados();
+                        System.out.println("\n--- Categorias Salariales (Switch Expression Java 17/21) ---");
+                        for (var i = 0; i < total; i++) {
+                            System.out.println("  " + nombres[i] + ": "
+                                    + MenuPrincipal.obtenerCategoriaSalarial(salarios[i]));
+                        }
+                    }
+                }
+                case 3 -> {
+                    // Task 3: Matriz de desempenio, for anidados, casting
+                    var total = CapturaEmpleado.getContadorEmpleados();
+                    if (total == 0) {
+                        System.out.println("Debe registrar al menos un empleado primero.");
+                    } else {
+                        calificaciones = Matrizdesempenio.capturarCalificaciones(
+                                scanner,
+                                CapturaEmpleado.getNombresEmpleados(),
+                                total
+                        );
+                        Matrizdesempenio    .mostrarReporteDesempenio(
+                                calificaciones,
+                                CapturaEmpleado.getNombresEmpleados(),
+                                total
+                        );
 
-        try {
-            /*
-             * Intentamos llamar a un método sobre el String nulo.
-             * Esto lanza NullPointerException en tiempo de ejecución.
-             *
-             * JAVA 8 mostraba solo:
-             *   NullPointerException  (sin más contexto — difícil de depurar)
-             *
-             * JAVA 14+ con Helpful NPE muestra exactamente:
-             *   Cannot invoke "String.length()" because the return value of
-             *   "Empleado.getNombre()" is null
-             *
-             * Esto ahorra tiempo real de debugging: sabes qué variable
-             * es null, qué método se intentó invocar y en qué línea.
-             * En proyectos grandes con cadenas de llamadas esto es crítico.
-             */
-            int longitud = empleado.getNombre().length();
-            System.out.println("Longitud del nombre: " + longitud);
+                        // Task 4: Evaluar promocion con operador ternario
+                        System.out.println("\n--- Evaluacion de Promocion (Operador Ternario) ---");
+                        var umbral = 3.5;
+                        for (var i = 0; i < total; i++) {
+                            var suma = 0.0;
+                            for (var j = 0; j < calificaciones[i].length; j++) {
+                                suma += calificaciones[i][j];
+                            }
+                            var promedio = suma / calificaciones[i].length;
+                            System.out.println("  " + CapturaEmpleado.getNombresEmpleados()[i] + ": "
+                                    + ManejoExcepciones.evaluarPromocion(promedio, umbral));
+                        }
+                    }
+                }
+                case 4 -> {
+                    // Task 1: Consultar categoria salarial de un salario ingresado
+                    System.out.print("Ingrese un salario para consultar su categoria: $");
+                    var salarioConsulta = ManejoExcepciones.leerDecimalSeguro(scanner, "");
+                    if (salarioConsulta >= 0) {
+                        System.out.println("Resultado: " + MenuPrincipal.obtenerCategoriaSalarial(salarioConsulta));
+                    }
+                }
+                case 5 -> {
+                    sistemaActivo = false;
+                    System.out.println("Cerrando Corporate Talent Hub. Hasta pronto!");
+                }
+                default -> System.out.println("Opcion no valida. Seleccione entre 1 y 5.");
+            }
 
-        } catch (NullPointerException e) {
-            System.out.println("NullPointerException capturada.");
-            System.out.println("Mensaje (Java 14+ Helpful NPE): " + e.getMessage());
-            System.out.println("En Java 8 este mensaje era null o vacio — sin contexto util.");
-        }
+            System.out.println();
 
-        // Restauramos el nombre para continuar
-        empleado.setNombre("Luis Campillo");
+        } while (sistemaActivo);
 
-        // Task 4: Comparación de referencias con el ==
-        System.out.println("LABORATORIO REFERENCIAS");
-
-        Empleado empleado2 = new Empleado(
-                (byte) 3,
-                (short) 101,
-                1002,
-                1098765432L,
-                0.05f,
-                3500000.00,
-                'M',
-                true,
-                "Luis Campillo"
-        );
-
-        /*
-         * COMPARACIÓN CON == entre objetos:
-         *
-         * En Java, == sobre objetos NO compara el contenido (datos).
-         * Compara las REFERENCIAS, es decir, si ambas variables apuntan
-         * exactamente a la misma dirección de memoria en el Heap.
-         *
-         * empleado y empleado2 tienen los mismos datos, pero son dos objetos
-         * distintos creados con 'new' → viven en posiciones diferentes del Heap
-         * → == devuelve false.
-         *
-         * Para comparar contenido se debe usar .equals(), que compara
-         * campo por campo si se sobreescribe correctamente.
-         *
-         * Heap:
-         *   [0x1A3F] ← empleado apunta aquí
-         *   [0x4B2C] ← empleado2 apunta aquí  (diferente dirección)
-         */
-        boolean mismaReferencia = (empleado == empleado2);
-        System.out.println("empleado1 == empleado2 (misma referencia): " + mismaReferencia);
-        System.out.println("Razon: son dos objetos distintos en el Heap,");
-        System.out.println("aunque tengan los mismos datos internos.\n");
-
-        /*
-         * Si una variable apunta al MISMO objeto, == sí devuelve true.
-         * empleado3 no es una copia — es la misma referencia del Heap.
-         */
-        Empleado empleado3 = empleado;
-        boolean mismaReferencia2 = (empleado == empleado3);
-        System.out.println("empleado1 == empleado3 (misma referencia): " + mismaReferencia2);
-        System.out.println("Razon: empleado3 apunta a la misma direccion del Heap que empleado1.");
-
-        System.out.println("\nFIN");
-        }
-
+        scanner.close();
     }
+}
