@@ -5,68 +5,73 @@ import com.empresa.talenthub.scanner.CapturaEmpleado;
 import com.empresa.talenthub.matriz.Matrizdesempenio;
 import com.empresa.talenthub.excepciones.ManejoExcepciones;
 
+import com.empresa.talenthub.arquitectura.NotasArquitectura;
+import com.empresa.talenthub.logica.ReglasNegocio;
+import com.empresa.talenthub.modelo.Empleado;
+import com.empresa.talenthub.modelo.EmpresaRecord;
+
+import com.empresa.talenthub.colecciones.ConfiguracionCorporativa;
+import com.empresa.talenthub.colecciones.GestorEmpleados;
+import com.empresa.talenthub.colecciones.ReporteTalento;
+import com.empresa.talenthub.colecciones.SecuenciaEmpleados;
+
 import java.util.Scanner;
 
 /**
- * CORPORATE TALENT HUB v2.0 - Semana 2
- * Control de flujo y evolucion de versiones
+ * CORPORATE TALENT HUB v3.0 - Semanas 1, 2 y 3
  *
- * Este programa integra las 4 tasks de la historia de usuario:
+ * SEMANA 1 (HU1) - Opcion 6 del menu:
+ *   TASK 1: Notas de arquitectura y evolucion de Java
+ *   TASK 2: Modelado con clase tradicional (Empleado) vs record (EmpresaRecord)
+ *   TASK 3: Motor de reglas de negocio y jerarquia de operadores
+ *   TASK 4: Laboratorio de Helpful NullPointerException y comparacion de referencias
+ *
+ * SEMANA 2 (HU2) - Opciones 1 a 5 del menu:
  *   TASK 1: Switch Legacy (Java 8) vs Switch Expression (Java 17/21)
- *   TASK 2: Scanner con var (Java 11+), do-while y validaciones con if/else
+ *   TASK 2: Scanner con var, do-while y validaciones con if/else
  *   TASK 3: Matriz de desempenio (double[][]), for anidados y casting double->int
  *   TASK 4: Manejo de excepciones (try-catch), diagnostico Java 17/21, operador ternario
  *
+ * SEMANA 3 (HU3) - Opcion 7 del menu:
+ *   TASK 1: ArrayList<Empleado> + HashMap<String, Empleado>
+ *   TASK 2: Factory methods List.of() y Map.of() (inmutables)
+ *   TASK 3: Sequenced Collections Java 21 (getFirst, getLast, reversed)
+ *   TASK 4: removeIf + var + reporte de promedio de salarios
+ *
  * @author Luis Campillo
- * @version 2.0
+ * @version 3.0
  */
 public class Main {
 
     public static void main(String[] args) {
-        // Scanner compartido para toda la aplicacion
         var scanner = new Scanner(System.in);
-
-        // Variable para almacenar calificaciones (se llena en opcion 3)
         double[][] calificaciones = null;
-
-        // Variable de control para el bucle principal
         var sistemaActivo = true;
 
         System.out.println("========================================");
         System.out.println("  Bienvenido a Corporate Talent Hub     ");
-        System.out.println("  Version 2.0 - Java 21                 ");
+        System.out.println("  Version 3.0 - Java 21                 ");
         System.out.println("========================================");
 
-        // Demostrar manejo de excepciones al inicio (Task 4)
+        // HU2 Task 4: demo de manejo de excepciones al inicio
         ManejoExcepciones.demostrarManejoErrores();
 
-        // Bucle principal do-while (Task 2: mantiene el sistema activo)
         do {
-            // Mostrar menu (Task 1)
             MenuPrincipal.mostrarMenu();
 
-            // Leer opcion de forma segura (Task 4: try-catch)
             var opcion = ManejoExcepciones.leerEnteroSeguro(scanner, "");
-
             if (opcion == -1) {
                 System.out.println("Intente de nuevo con una opcion valida.\n");
                 continue;
             }
 
-            // Mostrar que opcion se selecciono usando switch legacy (Task 1)
             System.out.println(">> " + MenuPrincipal.obtenerOpcionMenuLegacy(opcion) + "\n");
 
-            // Procesar opcion usando switch expression moderno (Task 1)
             switch (opcion) {
-                case 1 -> {
-                    // Task 2: Registro de empleado con Scanner, var, do-while, if/else
-                    CapturaEmpleado.registrarEmpleado(scanner);
-                }
-                case 2 -> {
-                    // Task 2: Consulta de empleados registrados
-                    CapturaEmpleado.consultarEmpleados();
+                case 1 -> CapturaEmpleado.registrarEmpleado(scanner);
 
-                    // Task 1: Mostrar categoria salarial de cada empleado
+                case 2 -> {
+                    CapturaEmpleado.consultarEmpleados();
                     var total = CapturaEmpleado.getContadorEmpleados();
                     if (total > 0) {
                         var salarios = CapturaEmpleado.getSalariosEmpleados();
@@ -78,24 +83,17 @@ public class Main {
                         }
                     }
                 }
+
                 case 3 -> {
-                    // Task 3: Matriz de desempenio, for anidados, casting
                     var total = CapturaEmpleado.getContadorEmpleados();
                     if (total == 0) {
                         System.out.println("Debe registrar al menos un empleado primero.");
                     } else {
                         calificaciones = Matrizdesempenio.capturarCalificaciones(
-                                scanner,
-                                CapturaEmpleado.getNombresEmpleados(),
-                                total
-                        );
-                        Matrizdesempenio    .mostrarReporteDesempenio(
-                                calificaciones,
-                                CapturaEmpleado.getNombresEmpleados(),
-                                total
-                        );
+                                scanner, CapturaEmpleado.getNombresEmpleados(), total);
+                        Matrizdesempenio.mostrarReporteDesempenio(
+                                calificaciones, CapturaEmpleado.getNombresEmpleados(), total);
 
-                        // Task 4: Evaluar promocion con operador ternario
                         System.out.println("\n--- Evaluacion de Promocion (Operador Ternario) ---");
                         var umbral = 3.5;
                         for (var i = 0; i < total; i++) {
@@ -109,19 +107,25 @@ public class Main {
                         }
                     }
                 }
+
                 case 4 -> {
-                    // Task 1: Consultar categoria salarial de un salario ingresado
                     System.out.print("Ingrese un salario para consultar su categoria: $");
                     var salarioConsulta = ManejoExcepciones.leerDecimalSeguro(scanner, "");
                     if (salarioConsulta >= 0) {
                         System.out.println("Resultado: " + MenuPrincipal.obtenerCategoriaSalarial(salarioConsulta));
                     }
                 }
+
                 case 5 -> {
                     sistemaActivo = false;
                     System.out.println("Cerrando Corporate Talent Hub. Hasta pronto!");
                 }
-                default -> System.out.println("Opcion no valida. Seleccione entre 1 y 5.");
+
+                case 6 -> ejecutarDemoHU1();
+
+                case 7 -> ejecutarDemoHU3();
+
+                default -> System.out.println("Opcion no valida. Seleccione entre 1 y 7.");
             }
 
             System.out.println();
@@ -129,5 +133,116 @@ public class Main {
         } while (sistemaActivo);
 
         scanner.close();
+    }
+
+    // ================================================================
+    // DEMO HU1 - Semana 1: arquitectura, modelado, reglas y NPE
+    // ================================================================
+    private static void ejecutarDemoHU1() {
+        System.out.println("========================================");
+        System.out.println(" DEMO HU1 - Arquitectura y modelado");
+        System.out.println("========================================\n");
+
+        // HU1 Task 1
+        new NotasArquitectura().mostrar();
+
+        // HU1 Task 2 - Empleado (clase tradicional Java 8)
+        var empleado = new Empleado(
+                (byte) 3, (short) 101, 1001, 1098765432L,
+                0.05f, 3500000.00, 'M', true, "Luis Campillo");
+        System.out.println("Empleado creado: " + empleado);
+
+        // HU1 Task 2 - EmpresaRecord (Java 17)
+        var empresa = new EmpresaRecord("Corporate Talent Hub S.A.S", "900.123.456-7", 2020);
+        System.out.println("Empresa: " + empresa);
+
+        // HU1 Task 3 - Motor de reglas
+        System.out.println("\n=== MOTOR DE REGLAS ===");
+        var reglas = new ReglasNegocio(
+                empleado.getIdEmpleo(), empleado.getSalarioBase(),
+                400000.00, 90, 27, 1, false);
+
+        var salarioFinal = reglas.calcularSalarioFinal();
+        System.out.println("Salario final calculado: $" + salarioFinal);
+
+        if (reglas.tieneBonoExtra()) {
+            System.out.println("ID par detectado -> aplicando bono extra");
+            reglas.aplicarBonoExtra(500000.00);
+        } else {
+            System.out.println("ID impar -> sin bono extra");
+        }
+        System.out.println("Empleado elegible: " + reglas.validarElegibilidad());
+
+        // HU1 Task 4 - Laboratorio NPE (Helpful NullPointerException Java 14+)
+        System.out.println("\n=== LABORATORIO NPE ===");
+        empleado.setNombre(null);
+        try {
+            var longitud = empleado.getNombre().length();
+            System.out.println("Longitud: " + longitud);
+        } catch (NullPointerException e) {
+            System.out.println("NPE capturada.");
+            System.out.println("Mensaje (Java 14+ Helpful NPE): " + e.getMessage());
+            System.out.println("En Java 8 este mensaje era null o vacio, sin contexto util.");
+        }
+        empleado.setNombre("Luis Campillo");
+
+        // HU1 Task 4 - Comparacion de referencias
+        System.out.println("\n=== LABORATORIO REFERENCIAS ===");
+        var empleado2 = new Empleado(
+                (byte) 3, (short) 101, 1002, 1098765432L,
+                0.05f, 3500000.00, 'M', true, "Luis Campillo");
+
+        System.out.println("empleado == empleado2 (misma referencia): " + (empleado == empleado2));
+        System.out.println("Razon: son dos objetos distintos en el Heap.");
+
+        var empleado3 = empleado;
+        System.out.println("empleado == empleado3 (misma referencia): " + (empleado == empleado3));
+        System.out.println("Razon: empleado3 apunta a la misma direccion del Heap.");
+
+        System.out.println("\n[FIN DEMO HU1]");
+    }
+
+    // ================================================================
+    // DEMO HU3 - Semana 3: Java Collections Framework
+    // ================================================================
+    private static void ejecutarDemoHU3() {
+        System.out.println("========================================");
+        System.out.println(" DEMO HU3 - Java Collections Framework");
+        System.out.println("========================================\n");
+
+        // HU3 Task 1
+        System.out.println("### TASK 1: ArrayList + HashMap ###");
+        var gestor = new GestorEmpleados();
+        for (var e : SecuenciaEmpleados.crearDemo()) {
+            gestor.agregar(e);
+        }
+        gestor.listar();
+
+        System.out.println("\nBusqueda O(1) por HashMap (ID=1003):");
+        var encontrado = gestor.buscarPorId("1003");
+        System.out.println("  -> " + (encontrado != null ? encontrado.getNombre() : "no encontrado"));
+
+        System.out.println("\nEliminando ID=1002...");
+        gestor.eliminar("1002");
+        gestor.listar();
+
+        // HU3 Task 2
+        System.out.println("\n### TASK 2: Factory Methods (List.of, Map.of) ###");
+        ConfiguracionCorporativa.imprimirCatalogo();
+
+        // HU3 Task 3
+        System.out.println("\n### TASK 3: Sequenced Collections (Java 21) ###");
+        SecuenciaEmpleados.demostrar(gestor.getEmpleados());
+
+        // HU3 Task 4
+        System.out.println("\n### TASK 4: removeIf + var + reporte ###");
+        var salarioMinimo = 2000000.0;
+        System.out.println("Filtrando empleados con salario < " + salarioMinimo);
+        var eliminados = ReporteTalento.filtrarPorSalarioMinimo(gestor.getEmpleados(), salarioMinimo);
+        System.out.println("Eliminados por filtro: " + eliminados);
+        gestor.listar();
+        ReporteTalento.imprimirReporte(gestor.getEmpleados());
+
+        System.out.println("\n[FIN DEMO HU3]");
     }
 }
