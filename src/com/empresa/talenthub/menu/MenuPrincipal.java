@@ -92,13 +92,17 @@ public class MenuPrincipal {
      */
     public static void mostrarMenu() {
         System.out.println("========================================");
-        System.out.println("   CORPORATE TALENT HUB v2.0            ");
+        System.out.println("   CORPORATE TALENT HUB v4.0            ");
         System.out.println("========================================");
         System.out.println("  1. Registrar empleado                 ");
         System.out.println("  2. Consultar empleados                ");
         System.out.println("  3. Matriz de desempenio               ");
         System.out.println("  4. Consultar categoria salarial       ");
         System.out.println("  5. Salir                              ");
+        System.out.println("  ---- Demos Semanales ----             ");
+        System.out.println("  6. Demo HU1 (Arquitectura)            ");
+        System.out.println("  7. Demo HU3 (Colecciones)             ");
+        System.out.println("  8. Demo HU5 (JDBC + MVC)              ");
         System.out.println("========================================");
         System.out.print("Seleccione una opcion: ");
     }

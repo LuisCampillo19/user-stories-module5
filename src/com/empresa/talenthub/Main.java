@@ -15,10 +15,12 @@ import com.empresa.talenthub.colecciones.GestorEmpleados;
 import com.empresa.talenthub.colecciones.ReporteTalento;
 import com.empresa.talenthub.colecciones.SecuenciaEmpleados;
 
+import com.empresa.talenthub.controller.EmpleadoController;
+
 import java.util.Scanner;
 
 /**
- * CORPORATE TALENT HUB v3.0 - Semanas 1, 2 y 3
+ * CORPORATE TALENT HUB v4.0 - Semanas 1, 2, 3, 4 y 5
  *
  * SEMANA 1 (HU1) - Opcion 6 del menu:
  *   TASK 1: Notas de arquitectura y evolucion de Java
@@ -38,8 +40,14 @@ import java.util.Scanner;
  *   TASK 3: Sequenced Collections Java 21 (getFirst, getLast, reversed)
  *   TASK 4: removeIf + var + reporte de promedio de salarios
  *
+ * SEMANA 5 (HU5) - Opcion 8 del menu:
+ *   TASK 1: Conexión JDBC con try-with-resources vs Legacy (finally)
+ *   TASK 2: DAO + CRUD seguro con PreparedStatement (anti SQL Injection)
+ *   TASK 3: Patrón MVC (model/dao/entity, controller, view)
+ *   TASK 4: Record EmpleadoReporte para mapeo inmutable de SELECT + Text Blocks
+ *
  * @author Luis Campillo
- * @version 3.0
+ * @version 4.0
  */
 public class Main {
 
@@ -50,7 +58,7 @@ public class Main {
 
         System.out.println("========================================");
         System.out.println("  Bienvenido a Corporate Talent Hub     ");
-        System.out.println("  Version 3.0 - Java 21                 ");
+        System.out.println("  Version 4.0 - Java 21 + JDBC          ");
         System.out.println("========================================");
 
         // HU2 Task 4: demo de manejo de excepciones al inicio
@@ -125,7 +133,16 @@ public class Main {
 
                 case 7 -> ejecutarDemoHU3();
 
-                default -> System.out.println("Opcion no valida. Seleccione entre 1 y 7.");
+                case 8 -> {
+                    // HU5: Persistencia relacional con JDBC + MVC
+                    System.out.println("========================================");
+                    System.out.println(" DEMO HU5 - JDBC + MVC (Persistencia)");
+                    System.out.println("========================================\n");
+                    var controlador = new EmpleadoController();
+                    controlador.iniciar();
+                }
+
+                default -> System.out.println("Opcion no valida. Seleccione entre 1 y 8.");
             }
 
             System.out.println();
